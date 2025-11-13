@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--Favicon-->
+    <link rel="icon" type="image/png" href="../images/favicon.png">
+    <title>The Holiday Candle | Admin Login</title>
+    <style>
+        :root {
+            --bg-color: #000000;
+            --white: #ffffff;
+            --black: #333333;
+            --neutral: #f8f4ed;
+            /* --gold: #D4AF37; */
+            --soft-gold: #f0d169;
+            --green: #014421;
+            --light-green: #058744;
+            --hover-green: #012E19;
+            --error: #8B0000;
+
+        }
+
+        body {
+            font-family: "Open Sans", sans-serif;
+            background-color: var(--neutral);
+            color: var(--black);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .login-container {
+            background: var(--white);
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            text-align: center;
+        }
+
+        .login-container h1 {
+            color: var(--green);
+            font-size: 1.8rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .login-container h1 small {
+            font-size: 1.2rem;
+            color: #555;
+            display: block;
+            margin-top: 4px;
+        }
+
+        form {
+            margin-top: 1.5rem;
+        }
+
+        input {
+            width: 80%;
+            padding: 0.6rem 0.8rem;
+            margin: 0.6rem 0;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #014421;
+            box-shadow: 0 0 5px rgba(1, 68, 33, 0.3);
+        }
+
+        button {
+            width: 90%;
+            padding: 0.8rem;
+            margin-top: 1rem;
+            border: none;
+            border-radius: 6px;
+            background: #014421;
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #026633;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-container">
+        <h1>The Holiday Candle <small>Admin</small></h1>
+        <form method="POST" action="/admin/login">
+            <input type="text" name="username" placeholder="Username" required />
+            <input type="password" name="password" placeholder="Password" required />
+            <button type="submit">Login</button>
+        </form>
+    </div>
+</body>
+
+</html>

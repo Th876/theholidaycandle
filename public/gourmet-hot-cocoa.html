@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gourmet Hot Cocoa | The Holiday Candle</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+    <!--Favicon-->
+    <link rel="icon" type="image/png" href="./images/favicon.png">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="./style.css">
+    <script src="./popup.js" defer></script>
+</head>
+
+<body>
+    <!-- Toaster notification -->
+    <div id="toast" class="toast-message top-right">
+        <span id="toast-msg"></span>
+    </div>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark py-3">
+        <div class="container">
+            <!-- Brand -->
+            <a class="navbar-brand fw-bold" href="index.html">The Holiday Candle</a>
+
+            <!-- Hamburger Button -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Nav Links -->
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item mx-2"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item mx-2"><a class="nav-link active" href="index.html#candles">Shop Candles</a></li>
+                    <li class="nav-item mx-2"><a class="nav-link" href="about.html">About</a></li>
+                    <li class="nav-item mx-2"><a class="nav-link" href="mailto:info@theholidaycandle.store">Contact</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Cart Icon -->
+            <div class="cart-icon position-relative" id="navbarCart">
+                <i class="fa fa-shopping-cart fa-2x text-white"></i>
+                <span
+                    class="cart-count position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger">0</span>
+            </div>
+
+        </div>
+    </nav>
+    <div id="miniCart" style="
+    position: fixed; 
+    top: 60px; 
+    right: 20px; 
+    width: 250px; 
+    background: #fff; 
+    border: 1px solid #ccc; 
+    padding: 10px; 
+    display: none; 
+    z-index: 1000;">
+        <h5>Cart</h5>
+        <div id="cartItems"></div>
+        <button id="checkoutBtn" class="btn btn-dark btn-sm w-100 mt-2">Checkout</button>
+    </div>
+
+
+    <!-- ...keep head & navbar as-is... -->
+
+    <!-- SINGLE PRODUCT SECTION -->
+    <section class="single-product py-5">
+        <div class="container">
+            <div class="row">
+                <!-- LEFT: IMAGE GALLERY -->
+                <div class="col-lg-6">
+                    <div class="row">
+                        <div class="col-2 d-flex flex-column gap-2">
+                            <img src="https://th876.github.io/thc-product-images/hot-cocoa-noflame.png
+" class="img-thumbnail thumb-img active" data-main="https://th876.github.io/thc-product-images/hot-cocoa-noflame.png
+" alt="Eggnog Crème 1">
+                            <img src="images/hotcocoa1.png" class="img-thumbnail thumb-img"
+                                data-main="images/hotcocoa1.png" alt="Hot Cocoa 1">
+                            <img src="images/hotcocoa2.png" class="img-thumbnail thumb-img"
+                                data-main="images/hotcocoa2.png" alt="Hot Cocoa 2">
+                            <img src="images/hotcocoa3.png" class="img-thumbnail thumb-img"
+                                data-main="images/hotcocoa3.png" alt="Hot Cocoa 3">
+                        </div>
+                        <div class="col-10">
+                            <img id="mainProductImg"
+                                src="https://th876.github.io/thc-product-images/hot-cocoa-noflame.png"
+                                class="img-fluid border" alt="Hot Cocoa Main">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT: PRODUCT DETAILS -->
+                <div class="col-lg-6 mt-4 mt-lg-0 d-flex flex-column">
+                    <div class="col text-start">
+                        <span class="text-warning">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                        </span>
+                        <a href="#reviewsList" class="text-decoration-underline ms-2">See Reviews</a>
+                    </div>
+                    <h2 class="fw-bold">Gourmet Hot Cocoa <span class="limited">Limited Edition</span></h2>
+                    <div id="productStockBadge" class="mb-2"></div>
+                    <p class="mt-3">
+                        Wrap yourself in the rich aroma of dark cocoa and fluffy marshmallows.
+                        This candle captures the warmth of a comforting cup of hot chocolate on a chilly winter evening.
+                        Sweet, chocolatey, and indulgent — it’s the perfect companion for cozy nights by the fire.
+                    </p>
+
+                    <!-- Icons Row -->
+                    <div class="d-flex flex-wrap align-items-center gap-4 mt-4">
+                        <div>
+                            <i class="fa-solid fa-hand-holding-heart me-2 text-dark"></i>
+                            <span class="small">Handmade in Georgia, USA</span>
+                        </div>
+                        <div>
+                            <i class="fa-solid fa-gift me-2 text-dark"></i>
+                            <span class="small">Gift Ready Packaging</span>
+                        </div>
+                        <div>
+                            <i class="fa-solid fa-truck me-2 text-dark"></i>
+                            <span class="small">Ships USA Only</span>
+                        </div>
+                        <div>
+                            <i class="fa-solid fa-lock me-2 text-dark"></i>
+                            <span class="small">Secure Checkout with Stripe</span>
+                        </div>
+                    </div>
+
+                    <!-- Divider -->
+                    <hr class="my-4 border-2 border-dark opacity-75">
+
+                    <!-- Quantity Selector -->
+                    <div class="d-flex align-items-center gap-2 mt-2">
+                        <button class="btn btn-outline-secondary" id="decreaseQty">-</button>
+                        <input type="number" value="1" min="1" id="productQty" class="form-control text-center"
+                            style="width:70px;">
+                        <button class="btn btn-outline-secondary" id="increaseQty">+</button>
+                    </div>
+
+                    <!-- Add to Cart -->
+                    <div class="mt-3 d-flex gap-2 flex-wrap">
+                        <button class="btn btn-lg" id="addToCart">Add to Cart</button>
+                    </div>
+
+                    <!-- Product Info Sections -->
+                    <div class="product-accordion mt-5">
+                        <div class="accordion-item">
+                            <button class="accordion-header">
+                                Product Details <span class="accordion-icon"><i class="fa-solid fa-plus"></i></span>
+                            </button>
+                            <div class="accordion-content">
+                                <p>
+                                    <strong>Scents:</strong> Dark Cocoa, Marshmallow<br>
+                                    <strong>Size:</strong> 8oz<br>
+                                    <strong>Burn Time:</strong> ~40 hours<br>
+                                    <strong>Burn Recommendation:</strong> 2–3 hours per session for even wax pooling<br>
+                                    <strong>Ideal For:</strong> Small to medium-sized rooms<br>
+                                    <strong>Safety:</strong> Do not eat. For decorative/aromatic use only.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <button class="accordion-header">
+                                Shipping Information <span class="accordion-icon"><i
+                                        class="fa-solid fa-plus"></i></span>
+                            </button>
+                            <div class="accordion-content">
+                                <p>
+                                    All orders ship via USPS Priority Mail within 2–3 business days after processing.
+                                    You’ll receive tracking updates once your package is on its way.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <button class="accordion-header">
+                                How to Care for Your Candle <span class="accordion-icon"><i
+                                        class="fa-solid fa-plus"></i></span>
+                            </button>
+                            <div class="accordion-content">
+                                <ul>
+                                    <li>Always trim the wick to ¼ inch before lighting.</li>
+                                    <li>Allow your candle to burn for 2–3 hours per session to achieve a full melt pool.
+                                    </li>
+                                    <li>Keep toppings and decorations away from the flame to prevent uneven burning.
+                                    </li>
+                                    <li>Stop burning when ¼ inch of wax remains to avoid heat damage to surfaces and
+                                        containers.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <button class="accordion-header">
+                                Refunds & Exchanges <span class="accordion-icon"><i class="fa-solid fa-plus"></i></span>
+                            </button>
+                            <div class="accordion-content">
+                                <p>
+                                    Because each candle is handmade, we cannot accept returns or exchanges.
+                                    However, if your candle arrives damaged or incorrect, please contact us
+                                    within 7 days of delivery and we’ll make it right.</p>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- close right col -->
+            </div> <!-- close main row -->
+        </div> <!-- close container -->
+    </section>
+
+
+
+    <!-- YOU MAY ALSO LIKE -->
+    <section class="related-products py-5">
+        <div class="container">
+            <h3 class="mb-4 text-dark">You May Also Like</h3>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3">
+                <div class="col">
+                    <a href="christmas-applebake.html" class="text-decoration-none">
+                        <img src="https://th876.github.io/thc-product-images/apple-bake-noflame.png" class="img-fluid"
+                            alt="Christmas Apple Bake">
+                        <p class="mt-2 text-dark text-center">Christmas Apple Bake</p>
+                    </a>
+                </div>
+                <div class="col">
+                    <a href="eggnog-crème.html" class="text-decoration-none">
+                        <img src="https://th876.github.io/thc-product-images/home-eggnog-noflame.png" class="img-fluid"
+                            alt="Eggnog Crème candle">
+                        <p class="mt-2 text-dark text-center">Eggnog Crème</p>
+                    </a>
+                </div>
+                <div class="col">
+                    <a href="spiced-cranberry.html" class="text-decoration-none">
+                        <img src="https://th876.github.io/thc-product-images/spiced-cran-noflame1.png" class="img-fluid"
+                            alt="Spiced Cranberry Orange">
+                        <p class="mt-2 text-dark text-center">Spiced Cranberry Orange</p>
+                    </a>
+                </div>
+                <div class="col">
+                    <a href="sugar-cookie.html" class="text-decoration-none">
+                        <img src="https://th876.github.io/thc-product-images/sugar-cookie-noflame.png" class="img-fluid"
+                            alt="Holiday Sugar Cookie">
+                        <p class="mt-2 text-dark text-center">Holiday Sugar Cookie</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+    <section id="reviewsList" class="py-5">
+        <div class="container">
+            <h3 class="mb-4">Customer Reviews</h3>
+
+            <div class="review-item mb-3">
+                <strong class="review-name">Ricky P.</strong>
+                <p class="review-text mb-0">I lit the Hot Cocoa candle, and it got the whole upstairs smelling like
+                    chocolate 🍫 😅 it smells soooo good. It makes me want to taste it to see if this is really
+                    chocolate 🤪 It’s actually so good that, I had some boiled eggs on the stove and I forgot about it.
+                    All I could smell is the chocolate and my eggs got burnt up 🥲</p>
+            </div>
+
+            <!-- <div class="review-item mb-3">
+                <strong class="review-name">Mike L.</strong>
+                <p class="review-text mb-0">Great quality candle. Burned evenly and smelled amazing.</p>
+            </div>
+
+            <div class="review-item mb-3">
+                <strong class="review-name">Samantha R.</strong>
+                <p class="review-text mb-0">A cozy scent that fills the room instantly. Highly recommend!</p>
+            </div> -->
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="text-white pt-5">
+        <div class="container">
+            <div class="row">
+
+                <!-- Logo / Branding -->
+                <div class="col-md-3 mb-4">
+                    <h3 class="footer-logo">The Holiday Candle</h3>
+                    <p>Hand-poured, dessert-inspired candles to bring warmth to your holidays.</p>
+                </div>
+
+                <!-- Navigation Links -->
+                <div class="col-md-3 mb-4">
+                    <h5>Shop</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="index.html#candles" class="text-white text-decoration-none">Shop All</a></li>
+                    </ul>
+                </div>
+
+                <!-- Policies / Support -->
+                <div class="col-md-3 mb-4">
+                    <h5>Support</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="about.html#faq" class="text-white text-decoration-none">FAQs</a></li>
+                        <li><a href="terms_of-service.html" class="text-white text-decoration-none">Terms of Service</a>
+                        </li>
+                        <li><a href="privacy_policy.html" class="text-white text-decoration-none">Privacy Policy</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Social / Contact -->
+                <div class="col-md-3 mb-4">
+                    <h5>Follow Us</h5>
+                    <div class="d-flex mb-3">
+                        <a href="https://www.instagram.com/theholidaycandle7/" target="_blank"
+                            class="text-white fs-4 me-3"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="https://www.tiktok.com/@theholidaycandle" target="_blank"
+                            class="text-white fs-4 me-3"><i class="fa-brands fa-tiktok"></i></a>
+                        <a href="mailto:info@theholidaycandle.store" class="text-white fs-4"><i
+                                class="fa fa-envelope"></i></a>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <hr class="border-secondary">
+            <!-- Payment & Security Row -->
+            <div class="payment-security text-center mb-4">
+                <div class="d-flex justify-content-center align-items-center mb-2">
+                    <p class="mb-0 me-2">Secure Payments Powered by</p>
+                    <img src="https://cdn-icons-png.flaticon.com/512/5968/5968382.png" alt="Stripe" width="70">
+                </div>
+
+                <div class="payment-icons">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png" alt="Visa"
+                        class="payment-icon me-2" width="56">
+                    <img src="https://cdn-icons-png.flaticon.com/512/196/196561.png" alt="Mastercard"
+                        class="payment-icon me-2">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/American_Express_logo_%282018%29.svg/640px-American_Express_logo_%282018%29.svg.png"
+                        alt="Amex" class="payment-icon me-2" style="height: 32px;">
+
+
+                    <img src="https://cdn-icons-png.flaticon.com/512/349/349230.png" alt="Discover"
+                        class="payment-icon">
+                </div>
+            </div>
+
+
+            <!-- Bottom Copyright -->
+            <div class="row">
+                <div class="col text-center">
+                    <p class="mb-0">&copy; 2025 The Holiday Candle. All Rights Reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Notify Me Modal -->
+    <div class="modal fade" id="notifyModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+        aria-labelledby="notifyModalLabel" aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 shadow">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-semibold" id="notifyModalLabel">Get Notified</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-3">This candle is currently out of stock. Enter your email to be notified when it’s
+                        back!</p>
+                    <input type="email" id="notifyEmail" class="form-control mb-3" placeholder="Enter your email"
+                        required>
+                    <div id="notifyFeedback" class="small mt-1"></div>
+
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button id="notifySubmitBtn" class="btn btn-dark">Notify Me</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="./cart.js"></script>
+    <script src="navbar.js"></script>
+    <script src="gourmet-hot-cocoa-product.js"></script>
+
+
+    <!-- === LARGE GIFT POPUP === -->
+    <div id="giftPopup" class="popup-overlay">
+        <div class="popup-content">
+            <button id="closePopup" class="close-btn">&times;</button>
+            <img src="./images/giftbox.png" alt="Gift Box" class="gift-bg" />
+            <div class="popup-inner" id="popupInner">
+                <h2 class="surprise-heading">A Sparkling Surprise Awaits!</h2>
+                <input type="email" id="emailInput" placeholder="Enter your email" required />
+                <div class="form-check mt-2">
+                    <input type="checkbox" class="form-check-input" id="promoConsent">
+                    <label class="form-check-label" for="promoConsent">I agree to receive promotional
+                        emails</label>
+                </div>
+                <button id="revealGiftBtn" class="mt-2">Reveal My Gift</button>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Holiday Candle | Admin Dashboard</title>
+    <!--Favicon-->
+    <link rel="icon" type="image/png" href="../images/favicon.png">
+    <link rel="stylesheet" href="/admin/assets/dashboard.css">
+    <!-- Bootstrap CSS (for modern popups) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <nav>
+        <div><span class="title">The Holiday Candle</span> <span class="subtitle">Admin</span></div>
+        <button id="logoutBtn" class="btn btn-light">Logout</button>
+    </nav>
+
+    <main>
+        <h2>Manage Stock</h2>
+        <table id="stockTable" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Stock</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </main>
+
+    <!-- Bootstrap JS + Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/admin/assets/dashboard.js"></script>
+</body>
+
+</html>

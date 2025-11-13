@@ -1,0 +1,29 @@
+{
+  "name": "holiday_candle_website",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "express-basic-auth": "^1.2.1",
+    "express-session": "^1.18.2",
+    "mongodb": "^7.0.0",
+    "mongoose": "^8.19.3",
+    "nodemailer": "^7.0.10",
+    "resend": "^6.4.2",
+    "stripe": "^19.3.0",
+    "uuid": "^13.0.0"
+  },
+  "description": ""
+}

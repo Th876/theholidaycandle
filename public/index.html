@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Holiday Candle</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+    <!--Favicon-->
+    <link rel="icon" type="image/png" href="./images/favicon.png">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="./style.css">
+
+    <script src="./popup.js" defer></script>
+</head>
+
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark py-3">
+        <div class="container">
+            <!-- Brand -->
+            <a class="navbar-brand fw-bold" href="#">The Holiday Candle</a>
+
+            <!-- Hamburger Button -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Nav Links -->
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item mx-2"><a class="nav-link active" href="#">Home</a></li>
+                    <li class="nav-item mx-2"><a class="nav-link" href="#candles">Shop Candles</a></li>
+                    <li class="nav-item mx-2"><a class="nav-link" href="about.html">About</a></li>
+                    <li class="nav-item mx-2"><a class="nav-link" href="mailto:info@theholidaycandle.store">Contact</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Cart Icon -->
+            <div class="cart-icon position-relative" id="navbarCart">
+                <i class="fa fa-shopping-cart fa-2x text-white"></i>
+                <span
+                    class="cart-count position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger">0</span>
+            </div>
+
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="hero-video-section">
+        <video autoplay muted loop playsinline id="heroVideo">
+            <source src="./video/thc_hero_video.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+
+        <div class="hero-text text-center">
+            <h1 class="display-3 ">The Holidays Just Got Sweeter</h1>
+            <a href="#candles" class="btn btn-outline-light btn-lg mt-3 px-4 py-2 btn-white">Shop the
+                Collection</a>
+        </div>
+    </section>
+
+
+
+    <!-- CANDLE GRID -->
+    <section class="candles py-5" id="candles">
+        <div class="container text-center">
+            <h2 class="mb-3">Limited Edition Holiday Candles</h2>
+            <p class="mb-5 candle-subtext">Discover dessert-inspired candles, hand-poured for cozy holiday moments.</p>
+            <div class="row g-4">
+
+                <!-- Candle 1 -->
+                <div class="col-md-4">
+                    <div class="candle-card" data-product="Eggnog Crème">
+                        <a href="eggnog-crème.html" class="image-link d-block position-relative">
+                            <img src="https://th876.github.io/thc-product-images/home-eggnog-noflame.png"
+                                class="original-img" alt="Eggnog Crème">
+                            <img src="https://th876.github.io/thc-product-images/home-eggnog-flame.png"
+                                class="hover-img" alt="Eggnog Crème Hover">
+                        </a>
+                        <div class="candle-info mt-2">
+                            <a href="eggnog-crème.html" class="candle-title text-decoration-none">Eggnog
+                                Crème</a>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <p class="candle-price mt-1">$24</p>
+                                <div class="productStockBadge mt-1"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Candle 2 -->
+                <div class="col-md-4">
+                    <div class="candle-card" data-product="Christmas Apple Bake">
+                        <a href="christmas-applebake.html" class="image-link d-block position-relative">
+                            <img src="https://th876.github.io/thc-product-images/apple-bake-noflame.png"
+                                class="original-img" alt="Christmas Apple Bake">
+                            <img src="https://th876.github.io/thc-product-images/apple-bake-flame.png" class="hover-img"
+                                alt="Christmas Apple Bake Hover">
+                        </a>
+                        <div class="candle-info mt-2">
+                            <a href="christmas-applebake.html" class="candle-title text-decoration-none">Christmas Apple
+                                Bake</a>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <p class="candle-price mt-1">$24</p>
+                                <div class="productStockBadge mt-1"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Candle 3 -->
+                <div class="col-md-4">
+                    <div class="candle-card" data-product="Gourmet Hot Cocoa">
+                        <a href="gourmet-hot-cocoa.html" class="image-link d-block position-relative">
+                            <img src="https://th876.github.io/thc-product-images/hot-cocoa-noflame.png"
+                                class="original-img" alt="Gourmet Hot Cocoa">
+                            <img src="https://th876.github.io/thc-product-images/hot-cocoa-flame.png" class="hover-img"
+                                alt="Gourmet Hot Cocoa Hover">
+                        </a>
+                        <div class="candle-info mt-2">
+                            <a href="gourmet-hot-cocoa.html" class="candle-title text-decoration-none">Gourmet
+                                Hot Cocoa</a>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <p class="candle-price mt-1">$24</p>
+                                <div class="productStockBadge mt-1"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Candle 4 -->
+                <div class="col-md-4">
+                    <div class="candle-card" data-product="Spiced Cranberry Orange">
+                        <a href="spiced-cranberry.html" class="image-link d-block position-relative">
+                            <img src="https://th876.github.io/thc-product-images/spiced-cran-noflame1.png"
+                                class="original-img" alt="Spiced Cranberry">
+                            <img src="https://th876.github.io/thc-product-images/spiced-cran-flame1.png"
+                                class="hover-img" alt="Spiced Cranberry Hover">
+                        </a>
+                        <div class="candle-info mt-2">
+                            <a href="spiced-cranberry.html" class="candle-title text-decoration-none">Spiced
+                                Cranberry Orange</a>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <p class="candle-price mt-1">$24</p>
+                                <div class="productStockBadge mt-1"></div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Candle 5 -->
+                <div class="col-md-4">
+                    <div class="candle-card" data-product="Holiday Sugar Cookie">
+                        <a href="sugar-cookie.html" class="image-link d-block position-relative">
+                            <img src="https://th876.github.io/thc-product-images/sugar-cookie-noflame.png"
+                                class="original-img" alt="Holiday Sugar Cookie">
+                            <img src="https://th876.github.io/thc-product-images/sugar-cookie-flame.png"
+                                class="hover-img" alt="Holiday Sugar Cookie Hover">
+                        </a>
+                        <div class="candle-info mt-2">
+                            <a href="sugar-cookie.html" class="candle-title text-decoration-none">Holiday
+                                Sugar Cookie</a>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <p class="candle-price mt-1">$24</p>
+                                <div class="productStockBadge mt-1"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="text-white pt-5">
+        <div class="container">
+            <div class="row">
+
+                <!-- Logo / Branding -->
+                <div class="col-md-3 mb-4">
+                    <h3 class="footer-logo">The Holiday Candle</h3>
+                    <p>Hand-poured, dessert-inspired candles to bring warmth to your holidays.</p>
+                </div>
+
+                <!-- Navigation Links -->
+                <div class="col-md-3 mb-4">
+                    <h5>Shop</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="index.html#candles" class="text-white text-decoration-none">Shop All</a></li>
+                    </ul>
+                </div>
+
+                <!-- Policies / Support -->
+                <div class="col-md-3 mb-4">
+                    <h5>Support</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="about.html#faq" class="text-white text-decoration-none">FAQs</a></li>
+                        <li><a href="terms_of-service.html" class="text-white text-decoration-none">Terms of Service</a>
+                        </li>
+                        <li><a href="privacy_policy.html" class="text-white text-decoration-none">Privacy Policy</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Social / Contact -->
+                <div class="col-md-3 mb-4">
+                    <h5>Follow Us</h5>
+                    <div class="d-flex mb-3">
+                        <a href="https://www.instagram.com/theholidaycandle7/" target="_blank"
+                            class="text-white fs-4 me-3"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="https://www.tiktok.com/@theholidaycandle" target="_blank"
+                            class="text-white fs-4 me-3"><i class="fa-brands fa-tiktok"></i></a>
+                        <a href="mailto:info@theholidaycandle.store" class="text-white fs-4"><i
+                                class="fa fa-envelope"></i></a>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <hr class="border-secondary">
+            <!-- Payment & Security Row -->
+            <div class="payment-security text-center mb-4">
+                <div class="d-flex justify-content-center align-items-center mb-2">
+                    <p class="mb-0 me-2">Secure Payments Powered by</p>
+                    <img src="https://cdn-icons-png.flaticon.com/512/5968/5968382.png" alt="Stripe" width="70">
+                </div>
+
+                <div class="payment-icons">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png" alt="Visa"
+                        class="payment-icon me-2" width="56">
+                    <img src="https://cdn-icons-png.flaticon.com/512/196/196561.png" alt="Mastercard"
+                        class="payment-icon me-2">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/American_Express_logo_%282018%29.svg/640px-American_Express_logo_%282018%29.svg.png"
+                        alt="Amex" class="payment-icon me-2" style="height: 32px;">
+
+
+                    <img src="https://cdn-icons-png.flaticon.com/512/349/349230.png" alt="Discover"
+                        class="payment-icon">
+                </div>
+            </div>
+
+
+            <!-- Bottom Copyright -->
+            <div class="row">
+                <div class="col text-center">
+                    <p class="mb-0">&copy; 2025 The Holiday Candle. All Rights Reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="./cart.js"></script>
+    <script src="navbar.js"></script>
+    <script src="./stock-homepage.js"></script>
+    <script src="./mini-popup.js"></script>
+
+
+    <!-- === LARGE GIFT POPUP === -->
+    <div id="giftPopup" class="popup-overlay">
+        <div class="popup-content">
+            <button id="closePopup" class="close-btn">&times;</button>
+            <img src="./images/giftbox.png" alt="Gift Box" class="gift-bg" />
+            <div class="popup-inner" id="popupInner">
+                <h2 class="surprise-heading">A Sparkling Surprise Awaits!</h2>
+                <input type="email" id="emailInput" placeholder="Enter your email" required />
+                <div class="form-check mt-2">
+                    <input type="checkbox" class="form-check-input" id="promoConsent">
+                    <label class="form-check-label" for="promoConsent">I agree to receive promotional
+                        emails</label>
+                </div>
+                <button id="revealGiftBtn" class="mt-2">Reveal My Gift</button>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Mini Gift Box (Persistent) -->
+    <div id="miniGiftBox" class="mini-giftbox">
+        <!-- Gift Icon -->
+        <img src="./images/giftbox.png" alt="Gift Box" id="miniGiftIcon" />
+
+        <!-- Bootstrap-style dismiss button (outside the form) -->
+        <button type="button" class="btn-close mini-dismiss-btn" aria-label="Close"></button>
+
+        <!-- Gift Form -->
+        <div id="miniGiftForm" class="mini-gift-form d-none">
+            <h4>A Sparkling Surprise Awaits!</h4>
+            <input type="email" id="miniEmailInput" placeholder="Enter your email" required />
+            <div class="form-check mt-1">
+                <input type="checkbox" class="form-check-input" id="miniPromoConsent">
+                <label class="form-check-label mini-promo-text" for="miniPromoConsent">
+                    I agree to receive promotional emails
+                </label>
+            </div>
+            <button id="miniRevealBtn">Reveal My Gift</button>
+            <p id="miniValidationMsg" class="text-danger small mt-1" style="display:none;"></p>
+        </div>
+    </div>
+
+
+    <!-- Toast Container -->
+    <div id="toastContainer"></div>
+
+</body>
+
+</html>

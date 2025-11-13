@@ -1,0 +1,69 @@
+@import url('https://fonts.googleapis.com/css2?family=Caprasimo&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+/* @import url('https://fonts.googleapis.com/css2?family=Special+Gothic+Expanded+One&display=swap'); */
+
+:root {
+    --bg-color: #000000;
+    --white: #ffffff;
+    --black: #333333;
+    --neutral: #f8f4ed;
+    /* --gold: #D4AF37; */
+    --soft-gold: #f0d169;
+    --green: #014421;
+    --light-green: #058744;
+    --hover-green: #012E19;
+    --error: #8B0000;
+
+}
+
+body {
+    font-family: "Open Sans", sans-serif;
+    background-color: var(--neutral);
+    color: var(--black);
+    margin: 0;
+    padding: 0;
+}
+
+nav {
+    background-color: #014421;
+    color: white;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+nav .title {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+nav .subtitle {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    margin-left: 0.5rem;
+}
+
+main {
+    padding: 1rem;
+}
+
+input[type=number] {
+    width: 60px;
+}
+
+button.update {
+    background-color: #014421;
+    color: white;
+    border: none;
+    padding: 0.3rem 0.6rem;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.toast-custom {
+    background-color: #f8f9fa;
+    /* amber/gold */
+    color: #014421;
+    /* dark green text for contrast */
+}
