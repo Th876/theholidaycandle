@@ -33,22 +33,6 @@ app.use(express.urlencoded({ extended: true }));
 app.set('trust proxy', 1);
 
 // ------------------- Session Middleware -------------------
-// import MongoStore from 'connect-mongo';
-
-// app.use(session({
-//     secret: process.env.SESSION_SECRET || 'changeme',
-//     resave: false,
-//     saveUninitialized: false,
-//     store: MongoStore.create({
-//         mongoUrl: process.env.MONGO_URI,        // must be your real Mongo URI
-//         collectionName: 'sessions'             // optional, defaults to 'sessions'
-//     }),
-//     cookie: {
-//         secure: process.env.NODE_ENV === 'production',
-//         sameSite: 'lax',
-//         maxAge: 24 * 60 * 60 * 1000          // 1 day
-//     }
-// }));
 
 app.use(session({
     secret: process.env.SESSION_SECRET || 'changeme',
