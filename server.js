@@ -26,9 +26,9 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 // server.js
 
-// ------------------- Middleware -------------------
-app.use(cors());
-app.use(express.urlencoded({ extended: true }));
+// // ------------------- Middleware -------------------
+// app.use(cors());
+// app.use(express.urlencoded({ extended: true }));
 
 app.set('trust proxy', 1);
 
@@ -161,8 +161,10 @@ app.post(
 );
 
 
-
+// ------------------- Middleware -------------------
 app.use(express.json());
+app.use(cors());
+app.use(express.urlencoded({ extended: true }));
 // ------------------- Stock Reservation Helpers -------------------
 async function reserveStock(items) {
     const reservedItems = [];
