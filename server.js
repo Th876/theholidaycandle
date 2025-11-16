@@ -92,6 +92,7 @@ app.post(
     '/webhook',
     bodyParser.raw({ type: 'application/json' }), // ⚠ raw needed for Stripe signature
     async (req, res) => {
+        console.log("[WEBHOOK RAW BODY]", req.body.toString());
         const sig = req.headers['stripe-signature'];
         let event;
 
