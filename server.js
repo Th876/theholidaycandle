@@ -30,12 +30,18 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 
+app.set('trust proxy', 1);
 app.use(session({
     secret: process.env.SESSION_SECRET || 'changeme',
     resave: false,
     saveUninitialized: false,
     // cookie: { secure: false }
-    cookie: { secure: true, sameSite: 'lax' } // production
+    // cookie: { secure: true, sameSite: 'lax' } // production
+    cookie: {
+        secure: process.env.NODE_ENV === 'production', // only true on live
+        sameSite: 'lax',
+        maxAge: 24 * 60 * 60 * 1000 // optional: 1 day
+    }
 }));
 
 // Disable cache for admin pages
