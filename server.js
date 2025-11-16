@@ -31,18 +31,25 @@ app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 
 app.set('trust proxy', 1);
+
+// ------------------- Session Middleware -------------------
+import MongoStore from 'connect-mongo';
+
 app.use(session({
     secret: process.env.SESSION_SECRET || 'changeme',
     resave: false,
     saveUninitialized: false,
-    // cookie: { secure: false }
-    // cookie: { secure: true, sameSite: 'lax' } // production
+    store: MongoStore.create({
+        mongoUrl: process.env.MONGO_URI,        // must be your real Mongo URI
+        collectionName: 'sessions'             // optional, defaults to 'sessions'
+    }),
     cookie: {
-        secure: process.env.NODE_ENV === 'production', // only true on live
+        secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',
-        maxAge: 24 * 60 * 60 * 1000 // optional: 1 day
+        maxAge: 24 * 60 * 60 * 1000          // 1 day
     }
 }));
+
 
 // Disable cache for admin pages
 app.use('/admin', (req, res, next) => {
@@ -293,11 +300,7 @@ app.post("/notify", async (req, res) => {
 
         await NotifyRequest.create({ email, product });
 
-        // try {
-        //     fs.appendFileSync(NOTIFY_FILE, `"${email}","${product}"\n`, 'utf8');
-        // } catch (e) {
-        //     console.warn('Failed to append to local CSV:', e.message);
-        // }
+
 
         if (process.env.ADMIN_NOTIFICATION_EMAIL) {
             await resend.emails.send({
