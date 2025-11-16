@@ -158,6 +158,11 @@ function requireAdminAuth(req, res, next) {
     res.redirect('/admin/login.html');
 }
 
+// ------------------- Publishable Stripe Key Route -------------------
+app.get('/stripe-pk', (req, res) => {
+    res.json({ pk: process.env.STRIPE_PUBLISHABLE_KEY });
+});
+
 // ------------------- Serve static files -------------------
 app.use('/admin/assets', express.static(path.join(__dirname, 'public/admin/assets')));
 app.use(express.static(path.join(__dirname, 'public')));

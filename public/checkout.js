@@ -1,6 +1,7 @@
-const stripe = Stripe("pk_test_51SK5y3KzSemqLUp4cr9Lhpf09J9fnb3PaqS29ZuLXVaWoOvTmTYMWD4TujH0ddxDyNFGSOSmUanW6HsPqfUOsdlB00xaZg878Y");
-
 (async () => {
+    const { pk } = await fetch('/stripe-pk').then(r => r.json());
+    const stripe = Stripe(pk);
+
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
 
     if (!cart.length) {
