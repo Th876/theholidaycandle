@@ -29,13 +29,13 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 // ------------------- Middleware -------------------
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
-// app.use(express.json());
 
 app.use(session({
     secret: process.env.SESSION_SECRET || 'changeme',
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false }
+    // cookie: { secure: false }
+    cookie: { secure: true, sameSite: 'lax' } // production
 }));
 
 // Disable cache for admin pages
@@ -155,7 +155,7 @@ function requireAdminAuth(req, res, next) {
     if (req.xhr || req.headers.accept.includes('application/json')) {
         return res.status(401).json({ success: false, message: 'Unauthorized' });
     }
-    res.redirect('/admin/login.html');
+    res.redirect('/admin/login');
 }
 
 // ------------------- Publishable Stripe Key Route -------------------
@@ -168,12 +168,12 @@ app.use('/admin/assets', express.static(path.join(__dirname, 'public/admin/asset
 app.use(express.static(path.join(__dirname, 'public')));
 
 // ------------------- Admin Pages -------------------
-app.get('/admin/login.html', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public/admin/login.html'));
+app.get('/admin/login', (req, res) => {
+    res.sendFile(path.join(__dirname, 'admin_pages/login.html'));
 });
 
 app.get('/admin/dashboard', requireAdminAuth, (req, res) => {
-    res.sendFile(path.join(__dirname, 'public/admin/dashboard.html'));
+    res.sendFile(path.join(__dirname, 'admin_pages/dashboard.html'));
 });
 
 // ------------------- Admin Auth Routes -------------------
