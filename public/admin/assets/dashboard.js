@@ -45,10 +45,6 @@ async function fetchStock() {
     }
 }
 
-// document.getElementById('logoutBtn').addEventListener('click', async () => {
-//     await fetch('/admin/logout', { method: 'POST', credentials: 'same-origin' });
-//     window.location.href = '/admin/login.html';
-// });
 document.getElementById('logoutBtn').addEventListener('click', async () => {
     const res = await fetch('/admin/logout', { method: 'POST', credentials: 'same-origin' });
     const result = await res.json();
