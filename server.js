@@ -33,23 +33,35 @@ app.use(express.urlencoded({ extended: true }));
 app.set('trust proxy', 1);
 
 // ------------------- Session Middleware -------------------
-import MongoStore from 'connect-mongo';
+// import MongoStore from 'connect-mongo';
+
+// app.use(session({
+//     secret: process.env.SESSION_SECRET || 'changeme',
+//     resave: false,
+//     saveUninitialized: false,
+//     store: MongoStore.create({
+//         mongoUrl: process.env.MONGO_URI,        // must be your real Mongo URI
+//         collectionName: 'sessions'             // optional, defaults to 'sessions'
+//     }),
+//     cookie: {
+//         secure: process.env.NODE_ENV === 'production',
+//         sameSite: 'lax',
+//         maxAge: 24 * 60 * 60 * 1000          // 1 day
+//     }
+// }));
 
 app.use(session({
     secret: process.env.SESSION_SECRET || 'changeme',
     resave: false,
     saveUninitialized: false,
-    store: MongoStore.create({
-        mongoUrl: process.env.MONGO_URI,        // must be your real Mongo URI
-        collectionName: 'sessions'             // optional, defaults to 'sessions'
-    }),
+    // cookie: { secure: false }
+    // cookie: { secure: true, sameSite: 'lax' } // production
     cookie: {
-        secure: process.env.NODE_ENV === 'production',
+        secure: process.env.NODE_ENV === 'production', // only true on live
         sameSite: 'lax',
-        maxAge: 24 * 60 * 60 * 1000          // 1 day
+        maxAge: 24 * 60 * 60 * 1000 // optional: 1 day
     }
 }));
-
 
 // Disable cache for admin pages
 app.use('/admin', (req, res, next) => {
