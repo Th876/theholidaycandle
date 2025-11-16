@@ -351,7 +351,6 @@ app.post('/create-checkout-session', async (req, res) => {
             customer_email: customerEmail || undefined,
             receipt_email: customerEmail,
             shipping_address_collection: { allowed_countries: ['US'] },
-            // shipping_address_collection: isLocalPickup ? undefined : { allowed_countries: ['US'] },
             shipping_options: shippingOptions,
             line_items: lineItems,
             success_url: `${YOUR_DOMAIN}/return.html?session_id={CHECKOUT_SESSION_ID}`,
