@@ -45,10 +45,22 @@ async function fetchStock() {
     }
 }
 
+// document.getElementById('logoutBtn').addEventListener('click', async () => {
+//     await fetch('/admin/logout', { method: 'POST', credentials: 'same-origin' });
+//     window.location.href = '/admin/login.html';
+// });
 document.getElementById('logoutBtn').addEventListener('click', async () => {
-    await fetch('/admin/logout', { method: 'POST', credentials: 'same-origin' });
-    window.location.href = '/admin/login.html';
+    const res = await fetch('/admin/logout', { method: 'POST', credentials: 'same-origin' });
+    const result = await res.json();
+
+    if (result.success) {
+        // Redirect to the correct login route
+        window.location.href = '/admin/login';
+    } else {
+        showToast('Logout failed', true);
+    }
 });
+
 
 // Bootstrap toast
 function showToast(message, isError = false) {
