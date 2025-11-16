@@ -126,10 +126,41 @@ app.post(
                 console.error('❌ Error updating stock:', err);
             }
         }
+        if (event.type === 'payment_intent.succeeded') {
+            console.log("💰 Payment intent succeeded, checking session and updating stock...");
+            try {
+                const paymentIntent = event.data.object;
+
+                // Retrieve the associated session
+                const sessions = await stripe.checkout.sessions.list({
+                    payment_intent: paymentIntent.id,
+                });
+
+                const session = sessions.data[0];
+                if (!session) {
+                    console.error("❌ No checkout session found for this payment intent.");
+                    return;
+                }
+
+                const cartItems = JSON.parse(session.metadata.cart || '[]');
+                for (const item of cartItems) {
+                    await Product.updateOne(
+                        { name: item.name.trim() },
+                        { $inc: { stock: -Number(item.quantity) } }
+                    );
+                }
+
+                console.log(`🟢 Stock updated for payment intent ${paymentIntent.id}`);
+            } catch (err) {
+                console.error('❌ Error in payment_intent.succeeded handler:', err);
+            }
+        }
 
         res.json({ received: true });
     }
 );
+
+
 
 app.use(express.json());
 // ------------------- Stock Reservation Helpers -------------------
