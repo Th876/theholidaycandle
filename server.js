@@ -380,6 +380,12 @@ app.post('/create-checkout-session', async (req, res) => {
             ? [{ shipping_rate_data: { type: 'fixed_amount', fixed_amount: { amount: 0, currency: 'usd' }, display_name: 'Local Pickup — Free' } }]
             : [{ shipping_rate_data: { type: 'fixed_amount', fixed_amount: { amount: SHIPPING_COST, currency: 'usd' }, display_name: 'USPS Priority Mail' } }];
 
+        const compactCart = items.map(item => ({
+            id: item.id,
+            quantity: item.quantity
+        }));
+
+
         const session = await stripe.checkout.sessions.create({
             mode: 'payment',
             payment_method_types: ['card'],
@@ -391,10 +397,11 @@ app.post('/create-checkout-session', async (req, res) => {
             line_items: lineItems,
             success_url: `${YOUR_DOMAIN}/return.html?session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `${YOUR_DOMAIN}/cart.html`,
-            metadata: {
-                cart: JSON.stringify(items),
-                delivery_method: deliveryMethod || (pickupCode === LOCAL_PICKUP_CODE ? 'Local Pickup' : 'USPS Priority Mail')
-            },
+            cart: JSON.stringify(compactCart),
+            // metadata: {
+            //     cart: JSON.stringify(items),
+            //     delivery_method: deliveryMethod || (pickupCode === LOCAL_PICKUP_CODE ? 'Local Pickup' : 'USPS Priority Mail')
+            // },
         });
 
         res.json({ url: session.url });
