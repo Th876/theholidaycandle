@@ -75,11 +75,19 @@ const NotifySchema = new Schema({
     createdAt: { type: Date, default: Date.now }
 }, { collection: 'notifyrequests' });
 
+// const ProductSchema = new Schema({
+//     name: { type: String, required: true, unique: true, trim: true },
+//     stock: { type: Number, required: true, default: 0 },
+//     price: { type: Number }
+// }, { collection: 'products' });
+
 const ProductSchema = new Schema({
     name: { type: String, required: true, unique: true, trim: true },
     stock: { type: Number, required: true, default: 0 },
-    price: { type: Number }
+    price: { type: Number },
+    stripeProductId: { type: String, required: false, trim: true } // NEW optional field
 }, { collection: 'products' });
+
 
 const Subscriber = mongoose.model('Subscriber', SubscriberSchema);
 const NotifyRequest = mongoose.model('NotifyRequest', NotifySchema);
@@ -112,52 +120,89 @@ app.post(
             const session = event.data.object;
 
             try {
-                const cartItems = JSON.parse(session.metadata.cart || '[]');
-
-                for (const item of cartItems) {
-                    // this Does NOT increment stock for a refund because you don’t accept returns. The refund logic should only adjust payments, not inventory.
-                    const product = await Product.findOne({ name: item.name.trim() });
-                    if (product) {
-                        product.stock = Math.max(product.stock - Number(item.quantity), 0);
-                        await product.save();
-                    }
-
+                // Ensure payment was successful before deducting stock
+                if (session.payment_status !== 'paid') {
+                    console.warn(`⚠️ Ignoring session ${session.id} — payment status is ${session.payment_status}`);
+                    return;
                 }
 
-                console.log(`✅ Stock updated for session ${session.id}`);
+                const cartItems = JSON.parse(session.metadata?.cart || '[]');
+
+                for (const item of cartItems) {
+                    const product = await Product.findOne({
+                        $or: [
+                            { stripeProductId: item.id },     // Best match in future
+                            { name: item.id },                // Fallback match (if name stored as id)
+                            { name: item.name?.trim() }       // Legacy fallback
+                        ]
+                    });
+
+                    if (product) {
+                        const qty = Number(item.q || item.quantity || 0);
+                        product.stock = Math.max(product.stock - qty, 0);
+                        await product.save();
+                        console.log(`📦 Deducted ${qty} from ${product.name}. New stock: ${product.stock}`);
+                    } else {
+                        console.warn(`⚠️ Product not found for item: ${JSON.stringify(item)}`);
+                    }
+                }
+
+                console.log(`🟢 Stock updated for paid session: ${session.id}`);
             } catch (err) {
                 console.error('❌ Error updating stock:', err);
             }
         }
-        if (event.type === 'payment_intent.succeeded') {
-            console.log("💰 Payment intent succeeded, checking session and updating stock...");
-            try {
-                const paymentIntent = event.data.object;
 
-                // Retrieve the associated session
-                const sessions = await stripe.checkout.sessions.list({
-                    payment_intent: paymentIntent.id,
-                });
+        // if (event.type === 'checkout.session.completed') {
+        //     const session = event.data.object;
 
-                const session = sessions.data[0];
-                if (!session) {
-                    console.error("❌ No checkout session found for this payment intent.");
-                    return;
-                }
+        //     try {
+        //         const cartItems = JSON.parse(session.metadata.cart || '[]');
 
-                const cartItems = JSON.parse(session.metadata.cart || '[]');
-                for (const item of cartItems) {
-                    await Product.updateOne(
-                        { name: item.name.trim() },
-                        { $inc: { stock: -Number(item.quantity) } }
-                    );
-                }
+        //         for (const item of cartItems) {
+        //             // this Does NOT increment stock for a refund because you don’t accept returns. The refund logic should only adjust payments, not inventory.
+        //             const product = await Product.findOne({ name: item.name.trim() });
+        //             if (product) {
+        //                 product.stock = Math.max(product.stock - Number(item.quantity), 0);
+        //                 await product.save();
+        //             }
 
-                console.log(`🟢 Stock updated for payment intent ${paymentIntent.id}`);
-            } catch (err) {
-                console.error('❌ Error in payment_intent.succeeded handler:', err);
-            }
-        }
+        //         }
+
+        //         console.log(`✅ Stock updated for session ${session.id}`);
+        //     } catch (err) {
+        //         console.error('❌ Error updating stock:', err);
+        //     }
+        // }
+        // if (event.type === 'payment_intent.succeeded') {
+        //     console.log("💰 Payment intent succeeded, checking session and updating stock...");
+        //     try {
+        //         const paymentIntent = event.data.object;
+
+        //         // Retrieve the associated session
+        //         const sessions = await stripe.checkout.sessions.list({
+        //             payment_intent: paymentIntent.id,
+        //         });
+
+        //         const session = sessions.data[0];
+        //         if (!session) {
+        //             console.error("❌ No checkout session found for this payment intent.");
+        //             return;
+        //         }
+
+        //         const cartItems = JSON.parse(session.metadata.cart || '[]');
+        //         for (const item of cartItems) {
+        //             await Product.updateOne(
+        //                 { name: item.name.trim() },
+        //                 { $inc: { stock: -Number(item.quantity) } }
+        //             );
+        //         }
+
+        //         console.log(`🟢 Stock updated for payment intent ${paymentIntent.id}`);
+        //     } catch (err) {
+        //         console.error('❌ Error in payment_intent.succeeded handler:', err);
+        //     }
+        // }
 
         res.json({ received: true });
     }
@@ -381,8 +426,8 @@ app.post('/create-checkout-session', async (req, res) => {
             : [{ shipping_rate_data: { type: 'fixed_amount', fixed_amount: { amount: SHIPPING_COST, currency: 'usd' }, display_name: 'USPS Priority Mail' } }];
 
         const compactCart = items.map(item => ({
-            id: item.id,
-            quantity: item.quantity
+            id: item.id,           // ex: "prod_TJF8Jznr..."
+            q: Number(item.quantity)
         }));
 
 
