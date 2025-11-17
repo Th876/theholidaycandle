@@ -180,7 +180,7 @@ addToCartBtn.addEventListener("click", () => {
         cart.push({
             id: 'prod_TJF8Jznrr7rlGQ',
             name: PRODUCT_NAME,
-            price: 1,
+            price: 24,
             priceId: 'price_1SMceGKzSemqLUp42BhyinKf',
             quantity: qty,
             image: 'https://th876.github.io/thc-product-images/apple-bake-noflame.png',
@@ -194,76 +194,6 @@ addToCartBtn.addEventListener("click", () => {
 });
 
 
-// addToCartBtn.addEventListener("click", () => {
-//     let qty = parseInt(qtyInput.value);
-//     if (currentStock <= 0) {
-//         showToast("Sorry, this candle is currently sold out.");
-//         return;
-//     }
-
-//     qty = Math.min(qty, currentStock);
-
-//     const cart = JSON.parse(localStorage.getItem("cart")) || [];
-//     const existingItem = cart.find(i => i.id === 'prod_TJF8Jznrr7rlGQ');
-
-//     if (existingItem) {
-//         existingItem.quantity = Math.min(existingItem.quantity + qty, currentStock);
-//     } else {
-//         cart.push({
-//             id: 'prod_TJF8Jznrr7rlGQ',
-//             name: PRODUCT_NAME,
-//             price: 1,
-//             priceId: 'price_1SMceGKzSemqLUp42BhyinKf',
-//             quantity: qty,
-//             image: 'https://th876.github.io/thc-product-images/apple-bake-noflame.png',
-//             description: 'Freshly baked apple pie, spiced with cinnamon'
-//         });
-//     }
-
-//     localStorage.setItem("cart", JSON.stringify(cart));
-//     updateCartCount();
-//     showToast(`${qty} × ${PRODUCT_NAME} added to your cart!`);
-// });
-
-
-// addToCartBtn.addEventListener("click", () => {
-//     const qty = parseInt(qtyInput.value);
-
-//     if (currentStock === 0) {
-//         showToast("Sorry, this candle is currently sold out.");
-//         return;
-//     }
-
-//     if (qty > currentStock) {
-//         qtyInput.value = currentStock;
-//         showToast("Looks like you’ve reached the limit for this item.");
-//         return;
-//     }
-
-//     const cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-//     // ⚡ Add the Stripe priceId here
-//     const product = {
-//         id: 'prod_TJF8Jznrr7rlGQ',                // Stripe Product ID
-//         name: PRODUCT_NAME,
-//         price: 24,                                // Display price in dollars
-//         priceId: 'price_1SMceGKzSemqLUp42BhyinKf', // Stripe Price ID ⚡ REQUIRED
-//         quantity: parseInt(qtyInput.value),
-//         image: 'https://th876.github.io/thc-product-images/apple-bake-noflame.png',
-//         description: 'Freshly baked apple pie, spiced with cinnamon'
-//     };
-
-//     const existingItem = cart.find(i => i.id === product.id);
-//     if (existingItem) {
-//         existingItem.quantity = Math.min(existingItem.quantity + qty, currentStock);
-//     } else {
-//         cart.push(product);
-//     }
-
-//     localStorage.setItem("cart", JSON.stringify(cart));
-//     updateCartCount();
-//     showToast(`${qty} × ${product.name} added to your cart!`);
-// });
 
 // --- 🟢 Toast System ---
 function showToast(message) {

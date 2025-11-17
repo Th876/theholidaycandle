@@ -60,41 +60,7 @@ function updateStockDisplay(stock) {
         stockBadge.innerHTML = `<span class="badge bg-warning text-dark rounded-pill"><i class="fa fa-circle me-1"></i>Low Stock</span>`;
     }
 }
-// function updateStockDisplay(stock) {
-//     // Clear existing badges safely
-//     stockBadge.textContent = "";
-//     addToCartBtn.disabled = false;
-//     addToCartBtn.classList.remove("btn-secondary", "btn-outofstock");
-//     addToCartBtn.classList.add("btn-dark");
-//     addToCartBtn.textContent = "Add to Cart";
 
-//     if (stock === 0) {
-//         // Out of stock badge
-//         const badge = document.createElement("span");
-//         badge.className = "badge bg-danger rounded-pill";
-//         const icon = document.createElement("i");
-//         icon.className = "fa fa-circle me-1";
-//         badge.appendChild(icon);
-//         badge.appendChild(document.createTextNode("Out of Stock"));
-//         stockBadge.appendChild(badge);
-
-//         // Disable add to cart
-//         addToCartBtn.disabled = true;
-//         addToCartBtn.classList.remove("btn-dark");
-//         addToCartBtn.classList.add("btn-outofstock");
-//         addToCartBtn.textContent = "Out of Stock";
-//         addNotifyButton();
-//     } else if (stock <= 4) {
-//         // Low stock badge
-//         const badge = document.createElement("span");
-//         badge.className = "badge bg-warning text-dark rounded-pill";
-//         const icon = document.createElement("i");
-//         icon.className = "fa fa-circle me-1";
-//         badge.appendChild(icon);
-//         badge.appendChild(document.createTextNode("Low Stock"));
-//         stockBadge.appendChild(badge);
-//     }
-// }
 
 // --- 🟠 Add Notify Me Button When Out of Stock ---
 function addNotifyButton() {
@@ -190,7 +156,7 @@ addToCartBtn.addEventListener("click", () => {
         cart.push({
             id: 'prod_TJFDDnYltOfPiv',
             name: PRODUCT_NAME,
-            price: 1,
+            price: 24,
             priceId: 'price_1SMcinKzSemqLUp4pngi5UtH',
             quantity: qty,
             image: 'https://th876.github.io/thc-product-images/sugar-cookie-noflame.png',

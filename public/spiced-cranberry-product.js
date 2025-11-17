@@ -157,7 +157,7 @@ addToCartBtn.addEventListener("click", () => {
         cart.push({
             id: 'prod_TJFCze2ecEQp8I',
             name: PRODUCT_NAME,
-            price: 1,
+            price: 24,
             priceId: 'price_1SMci5KzSemqLUp4INayFo7C',
             quantity: qty,
             image: 'https://th876.github.io/thc-product-images/spiced-cran-noflame1.png',

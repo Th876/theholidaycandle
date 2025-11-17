@@ -183,7 +183,7 @@ addToCartBtn.addEventListener("click", () => {
         cart.push({
             id: 'prod_THkjRm3X3AeFGc',
             name: PRODUCT_NAME,
-            price: 1,
+            price: 24,
             priceId: 'price_1SLBERKzSemqLUp4bjDFZgM4',
             quantity: qty,
             image: 'https://th876.github.io/thc-product-images/home-eggnog.png',
@@ -196,62 +196,6 @@ addToCartBtn.addEventListener("click", () => {
     showToast(`${qty} × ${PRODUCT_NAME} added to your cart!`);
 });
 
-
-// addToCartBtn.addEventListener("click", () => {
-//     let qty = parseInt(qtyInput.value);
-//     if (currentStock <= 0) {
-//         showToast("Sorry, this candle is currently sold out.");
-//         return;
-//     }
-
-//     qty = Math.min(qty, currentStock);
-
-//     const cart = JSON.parse(localStorage.getItem("cart")) || [];
-//     const existingItem = cart.find(i => i.id === 'prod_THkjRm3X3AeFGc');
-
-//     if (existingItem) {
-//         existingItem.quantity = Math.min(existingItem.quantity + qty, currentStock);
-//     } else {
-//         cart.push({
-//             id: 'prod_THkjRm3X3AeFGc',
-//             name: PRODUCT_NAME,
-//             price: 1,
-//             priceId: 'price_1SLBERKzSemqLUp4bjDFZgM4',
-//             quantity: qty,
-//             image: 'https://th876.github.io/thc-product-images/home-eggnog.png',
-//             description: 'Creamy eggnog candle, blended with nutmeg and vanilla bourbon'
-//         });
-//     }
-
-//     localStorage.setItem("cart", JSON.stringify(cart));
-//     updateCartCount();
-//     showToast(`${qty} × ${PRODUCT_NAME} added to your cart!`);
-// });
-
-// addToCartBtn.addEventListener("click", () => {
-//     const qty = parseInt(qtyInput.value);
-//     if (currentStock === 0) return showToast("Sorry, this candle is currently sold out.");
-//     if (qty > currentStock) { qtyInput.value = currentStock; return showToast("Reached limit."); }
-
-//     const cart = JSON.parse(localStorage.getItem("cart")) || [];
-//     const product = {
-//         id: "prod_THkjRm3X3AeFGc",
-//         name: PRODUCT_NAME,
-//         price: 24,
-//         priceId: "price_1SLBERKzSemqLUp4bjDFZgM4",
-//         quantity: qty,
-//         image: "https://th876.github.io/thc-product-images/home-eggnog.png",
-//         description: "Creamy eggnog candle, blended with nutmeg and vanilla bourbon",
-//     };
-
-//     const existingItem = cart.find(i => i.id === product.id);
-//     if (existingItem) existingItem.quantity = Math.min(existingItem.quantity + qty, currentStock);
-//     else cart.push(product);
-
-//     localStorage.setItem("cart", JSON.stringify(cart));
-//     updateCartCount();
-//     showToast(`${qty} × ${product.name} added to your cart!`);
-// });
 
 // --- Toast ---
 function showToast(message) {

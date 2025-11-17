@@ -186,7 +186,7 @@ addToCartBtn.addEventListener("click", () => {
         cart.push({
             id: 'prod_TJFBKLuYMiSKVD',
             name: PRODUCT_NAME,
-            price: 1,
+            price: 24,
             priceId: 'price_1SMchZKzSemqLUp4kxjuq3IV',
             quantity: qty,
             image: 'https://th876.github.io/thc-product-images/hot-cocoa-noflame.png',
@@ -199,75 +199,6 @@ addToCartBtn.addEventListener("click", () => {
     showToast(`${qty} × ${PRODUCT_NAME} added to your cart!`);
 });
 
-
-// addToCartBtn.addEventListener("click", () => {
-//     let qty = parseInt(qtyInput.value);
-//     if (currentStock <= 0) {
-//         showToast("Sorry, this candle is currently sold out.");
-//         return;
-//     }
-
-//     qty = Math.min(qty, currentStock);
-
-//     const cart = JSON.parse(localStorage.getItem("cart")) || [];
-//     const existingItem = cart.find(i => i.id === 'prod_TJFBKLuYMiSKVD');
-
-//     if (existingItem) {
-//         existingItem.quantity = Math.min(existingItem.quantity + qty, currentStock);
-//     } else {
-//         cart.push({
-//             id: 'prod_TJFBKLuYMiSKVD',
-//             name: PRODUCT_NAME,
-//             price: 1,
-//             priceId: 'price_1SMchZKzSemqLUp4kxjuq3IV',
-//             quantity: qty,
-//             image: 'https://th876.github.io/thc-product-images/hot-cocoa-noflame.png',
-//             description: 'Rich dark cocoa topped with fluffy marshmallow'
-//         });
-//     }
-
-//     localStorage.setItem("cart", JSON.stringify(cart));
-//     updateCartCount();
-//     showToast(`${qty} × ${PRODUCT_NAME} added to your cart!`);
-// });
-
-
-// addToCartBtn.addEventListener("click", () => {
-//     const qty = parseInt(qtyInput.value);
-
-//     if (currentStock === 0) {
-//         showToast("Sorry, this candle is currently sold out.");
-//         return;
-//     }
-
-//     if (qty > currentStock) {
-//         qtyInput.value = currentStock;
-//         showToast("Looks like you’ve reached the limit for this item.");
-//         return;
-//     }
-
-//     const cart = JSON.parse(localStorage.getItem("cart")) || [];
-//     const product = {
-//         id: 'prod_TJFBKLuYMiSKVD',
-//         name: PRODUCT_NAME,
-//         price: 24,
-//         priceId: 'price_1SMchZKzSemqLUp4kxjuq3IV',
-//         quantity: parseInt(qtyInput.value),
-//         image: 'https://th876.github.io/thc-product-images/hot-cocoa-noflame.png',
-//         description: 'Rich dark cocoa topped with fluffy marshmallow'
-//     };
-
-//     const existingItem = cart.find(i => i.id === product.id);
-//     if (existingItem) {
-//         existingItem.quantity = Math.min(existingItem.quantity + qty, currentStock);
-//     } else {
-//         cart.push(product);
-//     }
-
-//     localStorage.setItem("cart", JSON.stringify(cart));
-//     updateCartCount();
-//     showToast(`${qty} × ${product.name} added to your cart!`);
-// });
 
 // --- 🟢 Toast System ---
 function showToast(message) {
