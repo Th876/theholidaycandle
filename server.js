@@ -115,11 +115,18 @@ app.post(
                 const cartItems = JSON.parse(session.metadata.cart || '[]');
 
                 for (const item of cartItems) {
-                    await Product.updateOne(
-                        { name: item.name.trim() },
-                        { $inc: { stock: -Number(item.quantity) } }
-                        // { $inc: { stock: -item.quantity } }
-                    );
+                    // this Does NOT increment stock for a refund because you don’t accept returns. The refund logic should only adjust payments, not inventory.
+                    const product = await Product.findOne({ name: item.name.trim() });
+                    if (product) {
+                        product.stock = Math.max(product.stock - Number(item.quantity), 0);
+                        await product.save();
+                    }
+
+                    // await Product.updateOne(
+                    //     { name: item.name.trim() },
+                    //     { $inc: { stock: -Number(item.quantity) } }
+                    //     // { $inc: { stock: -item.quantity } }
+                    // );
                 }
 
                 console.log(`✅ Stock updated for session ${session.id}`);

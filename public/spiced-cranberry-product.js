@@ -25,10 +25,9 @@ let currentStock = 0;
 fetch('/stock')
     .then(res => res.json())
     .then(data => {
-        // Normalize keys
         const stockData = {};
         for (const key in data) {
-            stockData[key.trim().toLowerCase()] = data[key];
+            stockData[key.trim().toLowerCase()] = Math.max(data[key], 0); // clamp to 0
         }
 
         const productKey = PRODUCT_NAME.trim().toLowerCase();
@@ -41,24 +40,61 @@ fetch('/stock')
         updateStockDisplay(currentStock);
     });
 
+// fetch('/stock')
+//     .then(res => res.json())
+//     .then(data => {
+//         // Normalize keys
+//         const stockData = {};
+//         for (const key in data) {
+//             stockData[key.trim().toLowerCase()] = data[key];
+//         }
+
+//         const productKey = PRODUCT_NAME.trim().toLowerCase();
+//         currentStock = stockData[productKey] ?? 0;
+//         updateStockDisplay(currentStock);
+//     })
+//     .catch(err => {
+//         console.error('Error fetching stock:', err);
+//         currentStock = 0;
+//         updateStockDisplay(currentStock);
+//     });
+
 // --- 🔸 Stock UI & Button Behavior ---
 function updateStockDisplay(stock) {
-    stockBadge.textContent = ""; // safe
+    stockBadge.textContent = "";
     addToCartBtn.disabled = false;
-    addToCartBtn.classList.remove("btn-secondary");
+    addToCartBtn.classList.remove("btn-outofstock");
     addToCartBtn.classList.add("btn-dark");
+    addToCartBtn.textContent = `Add to Cart - $24`;
 
-    if (stock === 0) {
+    if (stock <= 0) {
         stockBadge.innerHTML = `<span class="badge bg-danger rounded-pill"><i class="fa fa-circle me-1"></i>Out of Stock</span>`;
         addToCartBtn.disabled = true;
         addToCartBtn.classList.remove("btn-dark");
         addToCartBtn.classList.add("btn-outofstock");
-        addToCartBtn.textContent = "Out of Stock";
         addNotifyButton();
     } else if (stock <= 4) {
         stockBadge.innerHTML = `<span class="badge bg-warning text-dark rounded-pill"><i class="fa fa-circle me-1"></i>Low Stock</span>`;
     }
 }
+
+// function updateStockDisplay(stock) {
+//     stockBadge.textContent = ""; // safe
+//     addToCartBtn.disabled = false;
+//     addToCartBtn.classList.remove("btn-secondary");
+//     addToCartBtn.classList.add("btn-dark");
+
+//     if (stock === 0) {
+//         stockBadge.innerHTML = `<span class="badge bg-danger rounded-pill"><i class="fa fa-circle me-1"></i>Out of Stock</span>`;
+//         addToCartBtn.disabled = true;
+//         addToCartBtn.classList.remove("btn-dark");
+//         addToCartBtn.classList.add("btn-outofstock");
+//         addToCartBtn.textContent = "Out of Stock";
+//         addNotifyButton();
+//     } else if (stock <= 4) {
+//         stockBadge.innerHTML = `<span class="badge bg-warning text-dark rounded-pill"><i class="fa fa-circle me-1"></i>Low Stock</span>`;
+//     }
+// }
 
 // --- 🟠 Add Notify Me Button When Out of Stock ---
 function addNotifyButton() {
@@ -134,41 +170,72 @@ function updateCartCount() {
 
 // --- 🛒 Add to Cart ---
 addToCartBtn.addEventListener("click", () => {
-    const qty = parseInt(qtyInput.value);
-
-    if (currentStock === 0) {
+    let qty = parseInt(qtyInput.value);
+    if (currentStock <= 0) {
         showToast("Sorry, this candle is currently sold out.");
         return;
     }
 
-    if (qty > currentStock) {
-        qtyInput.value = currentStock;
-        showToast("Looks like you’ve reached the limit for this item.");
-        return;
-    }
+    qty = Math.min(qty, currentStock);
 
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    const product = {
-        id: 'prod_TJFCze2ecEQp8I',
-        name: PRODUCT_NAME,
-        price: 1,
-        priceId: 'price_1SMci5KzSemqLUp4INayFo7C',
-        quantity: parseInt(qtyInput.value),
-        image: 'https://th876.github.io/thc-product-images/spiced-cran-noflame1.png',
-        description: 'Festive cranberry, zesty orange and holiday spice'
-    };
+    const existingItem = cart.find(i => i.id === 'prod_TJFCze2ecEQp8I');
 
-    const existingItem = cart.find(i => i.id === product.id);
     if (existingItem) {
         existingItem.quantity = Math.min(existingItem.quantity + qty, currentStock);
     } else {
-        cart.push(product);
+        cart.push({
+            id: 'prod_TJFCze2ecEQp8I',
+            name: PRODUCT_NAME,
+            price: 1,
+            priceId: 'price_1SMci5KzSemqLUp4INayFo7C',
+            quantity: qty,
+            image: 'https://th876.github.io/thc-product-images/spiced-cran-noflame1.png',
+            description: 'Festive cranberry, zesty orange and holiday spice'
+        });
     }
 
     localStorage.setItem("cart", JSON.stringify(cart));
     updateCartCount();
-    showToast(`${qty} × ${product.name} added to your cart!`);
+    showToast(`${qty} × ${PRODUCT_NAME} added to your cart!`);
 });
+
+// addToCartBtn.addEventListener("click", () => {
+//     const qty = parseInt(qtyInput.value);
+
+//     if (currentStock === 0) {
+//         showToast("Sorry, this candle is currently sold out.");
+//         return;
+//     }
+
+//     if (qty > currentStock) {
+//         qtyInput.value = currentStock;
+//         showToast("Looks like you’ve reached the limit for this item.");
+//         return;
+//     }
+
+//     const cart = JSON.parse(localStorage.getItem("cart")) || [];
+//     const product = {
+//         id: 'prod_TJFCze2ecEQp8I',
+//         name: PRODUCT_NAME,
+//         price: 1,
+//         priceId: 'price_1SMci5KzSemqLUp4INayFo7C',
+//         quantity: parseInt(qtyInput.value),
+//         image: 'https://th876.github.io/thc-product-images/spiced-cran-noflame1.png',
+//         description: 'Festive cranberry, zesty orange and holiday spice'
+//     };
+
+//     const existingItem = cart.find(i => i.id === product.id);
+//     if (existingItem) {
+//         existingItem.quantity = Math.min(existingItem.quantity + qty, currentStock);
+//     } else {
+//         cart.push(product);
+//     }
+
+//     localStorage.setItem("cart", JSON.stringify(cart));
+//     updateCartCount();
+//     showToast(`${qty} × ${product.name} added to your cart!`);
+// });
 
 // --- 🟢 Toast System ---
 function showToast(message) {
