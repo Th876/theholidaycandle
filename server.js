@@ -120,93 +120,44 @@ app.post(
             const session = event.data.object;
 
             try {
-                // Ensure payment was successful before deducting stock
-                if (session.payment_status !== 'paid') {
-                    console.warn(`⚠️ Ignoring session ${session.id} — payment status is ${session.payment_status}`);
-                    return;
-                }
-
                 const cartItems = JSON.parse(session.metadata?.cart || '[]');
 
                 for (const item of cartItems) {
-                    const product = await Product.findOne({
-                        $or: [
-                            { stripeProductId: item.id },     // Best match in future
-                            { name: item.id },                // Fallback match (if name stored as id)
-                            { name: item.name?.trim() }       // Legacy fallback
-                        ]
-                    });
+                    const qty = Number(item.q || item.quantity || 0);
 
-                    if (product) {
-                        const qty = Number(item.q || item.quantity || 0);
-                        product.stock = Math.max(product.stock - qty, 0);
-                        await product.save();
-                        console.log(`📦 Deducted ${qty} from ${product.name}. New stock: ${product.stock}`);
+                    // Atomic update: only subtract if enough stock
+                    const result = await Product.updateOne(
+                        { name: item.name.trim(), stock: { $gte: qty } },
+                        { $inc: { stock: -qty } }
+                    );
+
+                    if (result.matchedCount === 0) {
+                        // Could be product not found or insufficient stock
+                        const existing = await Product.findOne({ name: item.name.trim() });
+                        if (!existing) {
+                            console.warn(`⚠️ Product not found: ${item.name}`);
+                        } else {
+                            console.warn(`⚠️ Not enough stock to fulfill ${item.name}. Requested ${qty}, available ${existing.stock}`);
+                            // Optionally, notify admin or handle backorders here
+                        }
                     } else {
-                        console.warn(`⚠️ Product not found for item: ${JSON.stringify(item)}`);
+                        console.log(`📦 Deducted ${qty} from ${item.name}`);
                     }
                 }
 
-                console.log(`🟢 Stock updated for paid session: ${session.id}`);
+                console.log(`🟢 Stock updated for session: ${session.id}`);
             } catch (err) {
                 console.error('❌ Error updating stock:', err);
             }
         }
 
-        // if (event.type === 'checkout.session.completed') {
-        //     const session = event.data.object;
-
-        //     try {
-        //         const cartItems = JSON.parse(session.metadata.cart || '[]');
-
-        //         for (const item of cartItems) {
-        //             // this Does NOT increment stock for a refund because you don’t accept returns. The refund logic should only adjust payments, not inventory.
-        //             const product = await Product.findOne({ name: item.name.trim() });
-        //             if (product) {
-        //                 product.stock = Math.max(product.stock - Number(item.quantity), 0);
-        //                 await product.save();
-        //             }
-
-        //         }
-
-        //         console.log(`✅ Stock updated for session ${session.id}`);
-        //     } catch (err) {
-        //         console.error('❌ Error updating stock:', err);
-        //     }
-        // }
-        // if (event.type === 'payment_intent.succeeded') {
-        //     console.log("💰 Payment intent succeeded, checking session and updating stock...");
-        //     try {
-        //         const paymentIntent = event.data.object;
-
-        //         // Retrieve the associated session
-        //         const sessions = await stripe.checkout.sessions.list({
-        //             payment_intent: paymentIntent.id,
-        //         });
-
-        //         const session = sessions.data[0];
-        //         if (!session) {
-        //             console.error("❌ No checkout session found for this payment intent.");
-        //             return;
-        //         }
-
-        //         const cartItems = JSON.parse(session.metadata.cart || '[]');
-        //         for (const item of cartItems) {
-        //             await Product.updateOne(
-        //                 { name: item.name.trim() },
-        //                 { $inc: { stock: -Number(item.quantity) } }
-        //             );
-        //         }
-
-        //         console.log(`🟢 Stock updated for payment intent ${paymentIntent.id}`);
-        //     } catch (err) {
-        //         console.error('❌ Error in payment_intent.succeeded handler:', err);
-        //     }
-        // }
-
+        // ✅ Always respond 200 to Stripe
         res.json({ received: true });
     }
 );
+
+
+
 
 
 // ------------------- Middleware -------------------
@@ -217,7 +168,8 @@ app.use(express.urlencoded({ extended: true }));
 async function reserveStock(items) {
     const reservedItems = [];
     for (const item of items) {
-        const product = await Product.findOne({ name: item.name.trim() });
+        const product = await Product.findOne({ name: item.name?.trim() });
+        // const product = await Product.findOne({ name: item.name.trim() });
         if (!product) throw new Error(`Product ${item.name} not found`);
         if (product.stock < item.quantity) {
             throw new Error(`Not enough stock for ${item.name}. Only ${product.stock} left.`);
@@ -426,9 +378,11 @@ app.post('/create-checkout-session', async (req, res) => {
             : [{ shipping_rate_data: { type: 'fixed_amount', fixed_amount: { amount: SHIPPING_COST, currency: 'usd' }, display_name: 'USPS Priority Mail' } }];
 
         const compactCart = items.map(item => ({
-            id: item.id,           // ex: "prod_TJF8Jznr..."
+            id: item.id,
+            name: item.name,
             q: Number(item.quantity)
         }));
+
 
 
         const session = await stripe.checkout.sessions.create({
