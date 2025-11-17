@@ -163,13 +163,19 @@ addToCartBtn.addEventListener("click", () => {
         return;
     }
 
-    qty = Math.min(qty, currentStock);
-
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
     const existingItem = cart.find(i => i.id === 'prod_TJF8Jznrr7rlGQ');
 
+    // Calculate available stock considering items already in cart
+    let availableStock = currentStock - (existingItem?.quantity || 0);
+
+    if (qty > availableStock) {
+        showToast("Sorry, the quantity you requested is not available.");
+        return;
+    }
+
     if (existingItem) {
-        existingItem.quantity = Math.min(existingItem.quantity + qty, currentStock);
+        existingItem.quantity += qty; // safe to add because of the check
     } else {
         cart.push({
             id: 'prod_TJF8Jznrr7rlGQ',
@@ -186,6 +192,38 @@ addToCartBtn.addEventListener("click", () => {
     updateCartCount();
     showToast(`${qty} × ${PRODUCT_NAME} added to your cart!`);
 });
+
+
+// addToCartBtn.addEventListener("click", () => {
+//     let qty = parseInt(qtyInput.value);
+//     if (currentStock <= 0) {
+//         showToast("Sorry, this candle is currently sold out.");
+//         return;
+//     }
+
+//     qty = Math.min(qty, currentStock);
+
+//     const cart = JSON.parse(localStorage.getItem("cart")) || [];
+//     const existingItem = cart.find(i => i.id === 'prod_TJF8Jznrr7rlGQ');
+
+//     if (existingItem) {
+//         existingItem.quantity = Math.min(existingItem.quantity + qty, currentStock);
+//     } else {
+//         cart.push({
+//             id: 'prod_TJF8Jznrr7rlGQ',
+//             name: PRODUCT_NAME,
+//             price: 1,
+//             priceId: 'price_1SMceGKzSemqLUp42BhyinKf',
+//             quantity: qty,
+//             image: 'https://th876.github.io/thc-product-images/apple-bake-noflame.png',
+//             description: 'Freshly baked apple pie, spiced with cinnamon'
+//         });
+//     }
+
+//     localStorage.setItem("cart", JSON.stringify(cart));
+//     updateCartCount();
+//     showToast(`${qty} × ${PRODUCT_NAME} added to your cart!`);
+// });
 
 
 // addToCartBtn.addEventListener("click", () => {

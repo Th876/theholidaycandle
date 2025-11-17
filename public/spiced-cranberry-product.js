@@ -140,13 +140,19 @@ addToCartBtn.addEventListener("click", () => {
         return;
     }
 
-    qty = Math.min(qty, currentStock);
-
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
     const existingItem = cart.find(i => i.id === 'prod_TJFCze2ecEQp8I');
 
+    // Calculate available stock considering items already in cart
+    let availableStock = currentStock - (existingItem?.quantity || 0);
+
+    if (qty > availableStock) {
+        showToast("Sorry, the quantity you requested is not available.");
+        return;
+    }
+
     if (existingItem) {
-        existingItem.quantity = Math.min(existingItem.quantity + qty, currentStock);
+        existingItem.quantity += qty; // safe to add because of the check
     } else {
         cart.push({
             id: 'prod_TJFCze2ecEQp8I',
@@ -163,6 +169,7 @@ addToCartBtn.addEventListener("click", () => {
     updateCartCount();
     showToast(`${qty} × ${PRODUCT_NAME} added to your cart!`);
 });
+
 
 
 
