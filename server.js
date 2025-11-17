@@ -397,11 +397,12 @@ app.post('/create-checkout-session', async (req, res) => {
             line_items: lineItems,
             success_url: `${YOUR_DOMAIN}/return.html?session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `${YOUR_DOMAIN}/cart.html`,
-            cart: JSON.stringify(compactCart),
-            // metadata: {
-            //     cart: JSON.stringify(items),
-            //     delivery_method: deliveryMethod || (pickupCode === LOCAL_PICKUP_CODE ? 'Local Pickup' : 'USPS Priority Mail')
-            // },
+
+            metadata: {
+                cart: JSON.stringify(compactCart),
+                //     cart: JSON.stringify(items),
+                delivery_method: deliveryMethod || (pickupCode === LOCAL_PICKUP_CODE ? 'Local Pickup' : 'USPS Priority Mail')
+            },
         });
 
         res.json({ url: session.url });
