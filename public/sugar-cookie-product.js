@@ -24,19 +24,19 @@ let currentStock = 0;
 // --- 🟢 Fetch Stock ---
 // fetch live stock from server
 fetch('/stock')
-    .then(res => {
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        return res.json();
-    })
+    .then(res => res.json())
     .then(data => {
-        console.log('Stock fetched:', data);
         const stockData = {};
-        for (const key in data) stockData[key.trim().toLowerCase()] = data[key];
-        currentStock = stockData[PRODUCT_NAME.trim().toLowerCase()] ?? 0;
+        for (const key in data) {
+            stockData[key.trim().toLowerCase()] = Math.max(data[key], 0); // clamp to 0
+        }
+
+        const productKey = PRODUCT_NAME.trim().toLowerCase();
+        currentStock = stockData[productKey] ?? 0;
         updateStockDisplay(currentStock);
     })
     .catch(err => {
-        console.error('Failed to fetch stock:', err);
+        console.error('Error fetching stock:', err);
         currentStock = 0;
         updateStockDisplay(currentStock);
     });
@@ -44,40 +44,57 @@ fetch('/stock')
 
 // --- 🔸 Stock UI & Button Behavior ---
 function updateStockDisplay(stock) {
-    // Clear existing badges safely
     stockBadge.textContent = "";
     addToCartBtn.disabled = false;
-    addToCartBtn.classList.remove("btn-secondary", "btn-outofstock");
+    addToCartBtn.classList.remove("btn-outofstock");
     addToCartBtn.classList.add("btn-dark");
-    addToCartBtn.textContent = "Add to Cart";
+    addToCartBtn.textContent = `Add to Cart - $24`;
 
-    if (stock === 0) {
-        // Out of stock badge
-        const badge = document.createElement("span");
-        badge.className = "badge bg-danger rounded-pill";
-        const icon = document.createElement("i");
-        icon.className = "fa fa-circle me-1";
-        badge.appendChild(icon);
-        badge.appendChild(document.createTextNode("Out of Stock"));
-        stockBadge.appendChild(badge);
-
-        // Disable add to cart
+    if (stock <= 0) {
+        stockBadge.innerHTML = `<span class="badge bg-danger rounded-pill"><i class="fa fa-circle me-1"></i>Out of Stock</span>`;
         addToCartBtn.disabled = true;
         addToCartBtn.classList.remove("btn-dark");
         addToCartBtn.classList.add("btn-outofstock");
-        addToCartBtn.textContent = "Out of Stock";
         addNotifyButton();
     } else if (stock <= 4) {
-        // Low stock badge
-        const badge = document.createElement("span");
-        badge.className = "badge bg-warning text-dark rounded-pill";
-        const icon = document.createElement("i");
-        icon.className = "fa fa-circle me-1";
-        badge.appendChild(icon);
-        badge.appendChild(document.createTextNode("Low Stock"));
-        stockBadge.appendChild(badge);
+        stockBadge.innerHTML = `<span class="badge bg-warning text-dark rounded-pill"><i class="fa fa-circle me-1"></i>Low Stock</span>`;
     }
 }
+// function updateStockDisplay(stock) {
+//     // Clear existing badges safely
+//     stockBadge.textContent = "";
+//     addToCartBtn.disabled = false;
+//     addToCartBtn.classList.remove("btn-secondary", "btn-outofstock");
+//     addToCartBtn.classList.add("btn-dark");
+//     addToCartBtn.textContent = "Add to Cart";
+
+//     if (stock === 0) {
+//         // Out of stock badge
+//         const badge = document.createElement("span");
+//         badge.className = "badge bg-danger rounded-pill";
+//         const icon = document.createElement("i");
+//         icon.className = "fa fa-circle me-1";
+//         badge.appendChild(icon);
+//         badge.appendChild(document.createTextNode("Out of Stock"));
+//         stockBadge.appendChild(badge);
+
+//         // Disable add to cart
+//         addToCartBtn.disabled = true;
+//         addToCartBtn.classList.remove("btn-dark");
+//         addToCartBtn.classList.add("btn-outofstock");
+//         addToCartBtn.textContent = "Out of Stock";
+//         addNotifyButton();
+//     } else if (stock <= 4) {
+//         // Low stock badge
+//         const badge = document.createElement("span");
+//         badge.className = "badge bg-warning text-dark rounded-pill";
+//         const icon = document.createElement("i");
+//         icon.className = "fa fa-circle me-1";
+//         badge.appendChild(icon);
+//         badge.appendChild(document.createTextNode("Low Stock"));
+//         stockBadge.appendChild(badge);
+//     }
+// }
 
 // --- 🟠 Add Notify Me Button When Out of Stock ---
 function addNotifyButton() {
@@ -150,41 +167,74 @@ function updateCartCount() {
 
 // --- 🛒 Add to Cart ---
 addToCartBtn.addEventListener("click", () => {
-    const qty = parseInt(qtyInput.value);
-
-    if (currentStock === 0) {
+    let qty = parseInt(qtyInput.value);
+    if (currentStock <= 0) {
         showToast("Sorry, this candle is currently sold out.");
         return;
     }
 
-    if (qty > currentStock) {
-        qtyInput.value = currentStock;
-        showToast("Looks like you’ve reached the limit for this item.");
-        return;
-    }
+    qty = Math.min(qty, currentStock);
 
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    const product = {
-        id: 'prod_TJFDDnYltOfPiv',
-        name: PRODUCT_NAME,
-        price: 24,
-        priceId: 'price_1SMcinKzSemqLUp4pngi5UtH',
-        quantity: qty,
-        image: 'https://th876.github.io/thc-product-images/sugar-cookie-noflame.png',
-        description: 'Freshly baked cookies with vanilla bean and sugar'
-    };
+    const existingItem = cart.find(i => i.id === 'prod_TJFDDnYltOfPiv');
 
-    const existingItem = cart.find(i => i.id === product.id);
     if (existingItem) {
         existingItem.quantity = Math.min(existingItem.quantity + qty, currentStock);
     } else {
-        cart.push(product);
+        cart.push({
+            id: 'prod_TJFDDnYltOfPiv',
+            name: PRODUCT_NAME,
+            price: 1,
+            priceId: 'price_1SMcinKzSemqLUp4pngi5UtH',
+            quantity: qty,
+            image: 'https://th876.github.io/thc-product-images/sugar-cookie-noflame.png',
+            description: 'Freshly baked cookies with vanilla bean and sugar'
+        });
     }
 
     localStorage.setItem("cart", JSON.stringify(cart));
     updateCartCount();
-    showToast(`${qty} × ${product.name} added to your cart!`);
+    showToast(`${qty} × ${PRODUCT_NAME} added to your cart!`);
 });
+
+
+// // ---------
+// addToCartBtn.addEventListener("click", () => {
+//     const qty = parseInt(qtyInput.value);
+
+//     if (currentStock === 0) {
+//         showToast("Sorry, this candle is currently sold out.");
+//         return;
+//     }
+
+//     if (qty > currentStock) {
+//         qtyInput.value = currentStock;
+//         showToast("Looks like you’ve reached the limit for this item.");
+//         return;
+//     }
+
+//     const cart = JSON.parse(localStorage.getItem("cart")) || [];
+//     const product = {
+//         id: 'prod_TJFDDnYltOfPiv',
+//         name: PRODUCT_NAME,
+//         price: 24,
+//         priceId: 'price_1SMcinKzSemqLUp4pngi5UtH',
+//         quantity: qty,
+//         image: 'https://th876.github.io/thc-product-images/sugar-cookie-noflame.png',
+//         description: 'Freshly baked cookies with vanilla bean and sugar'
+//     };
+
+//     const existingItem = cart.find(i => i.id === product.id);
+//     if (existingItem) {
+//         existingItem.quantity = Math.min(existingItem.quantity + qty, currentStock);
+//     } else {
+//         cart.push(product);
+//     }
+
+//     localStorage.setItem("cart", JSON.stringify(cart));
+//     updateCartCount();
+//     showToast(`${qty} × ${product.name} added to your cart!`);
+// });
 
 // --- 🟢 Toast System ---
 function showToast(message) {

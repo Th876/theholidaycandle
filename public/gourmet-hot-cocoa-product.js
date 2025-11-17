@@ -23,10 +23,9 @@ let currentStock = 0;
 fetch('/stock')
     .then(res => res.json())
     .then(data => {
-        // Normalize keys
         const stockData = {};
         for (const key in data) {
-            stockData[key.trim().toLowerCase()] = data[key];
+            stockData[key.trim().toLowerCase()] = Math.max(data[key], 0); // clamp to 0
         }
 
         const productKey = PRODUCT_NAME.trim().toLowerCase();
@@ -42,36 +41,53 @@ fetch('/stock')
 
 // --- 🔸 Stock UI & Button Behavior ---
 function updateStockDisplay(stock) {
-    stockBadge.textContent = ""; // cleared safely
-    stockBadge.innerHTML = ""; // clear existing badges safely
+    stockBadge.textContent = "";
     addToCartBtn.disabled = false;
-    addToCartBtn.classList.remove("btn-secondary");
+    addToCartBtn.classList.remove("btn-outofstock");
     addToCartBtn.classList.add("btn-dark");
+    addToCartBtn.textContent = `Add to Cart - $24`;
 
-    if (stock === 0) {
-        const badge = document.createElement("span");
-        badge.className = "badge bg-danger rounded-pill";
-        const icon = document.createElement("i");
-        icon.className = "fa fa-circle me-1";
-        badge.appendChild(icon);
-        badge.appendChild(document.createTextNode("Out of Stock"));
-        stockBadge.appendChild(badge);
-
+    if (stock <= 0) {
+        stockBadge.innerHTML = `<span class="badge bg-danger rounded-pill"><i class="fa fa-circle me-1"></i>Out of Stock</span>`;
         addToCartBtn.disabled = true;
         addToCartBtn.classList.remove("btn-dark");
         addToCartBtn.classList.add("btn-outofstock");
-        addToCartBtn.textContent = "Out of Stock";
         addNotifyButton();
     } else if (stock <= 4) {
-        const badge = document.createElement("span");
-        badge.className = "badge bg-warning text-dark rounded-pill";
-        const icon = document.createElement("i");
-        icon.className = "fa fa-circle me-1";
-        badge.appendChild(icon);
-        badge.appendChild(document.createTextNode("Low Stock"));
-        stockBadge.appendChild(badge);
+        stockBadge.innerHTML = `<span class="badge bg-warning text-dark rounded-pill"><i class="fa fa-circle me-1"></i>Low Stock</span>`;
     }
 }
+// function updateStockDisplay(stock) {
+//     stockBadge.textContent = ""; // cleared safely
+//     stockBadge.innerHTML = ""; // clear existing badges safely
+//     addToCartBtn.disabled = false;
+//     addToCartBtn.classList.remove("btn-secondary");
+//     addToCartBtn.classList.add("btn-dark");
+
+//     if (stock === 0) {
+//         const badge = document.createElement("span");
+//         badge.className = "badge bg-danger rounded-pill";
+//         const icon = document.createElement("i");
+//         icon.className = "fa fa-circle me-1";
+//         badge.appendChild(icon);
+//         badge.appendChild(document.createTextNode("Out of Stock"));
+//         stockBadge.appendChild(badge);
+
+//         addToCartBtn.disabled = true;
+//         addToCartBtn.classList.remove("btn-dark");
+//         addToCartBtn.classList.add("btn-outofstock");
+//         addToCartBtn.textContent = "Out of Stock";
+//         addNotifyButton();
+//     } else if (stock <= 4) {
+//         const badge = document.createElement("span");
+//         badge.className = "badge bg-warning text-dark rounded-pill";
+//         const icon = document.createElement("i");
+//         icon.className = "fa fa-circle me-1";
+//         badge.appendChild(icon);
+//         badge.appendChild(document.createTextNode("Low Stock"));
+//         stockBadge.appendChild(badge);
+//     }
+// }
 
 // --- 🟠 Add Notify Me Button When Out of Stock ---
 function addNotifyButton() {
@@ -147,41 +163,71 @@ function updateCartCount() {
 
 // --- 🛒 Add to Cart ---
 addToCartBtn.addEventListener("click", () => {
-    const qty = parseInt(qtyInput.value);
-
-    if (currentStock === 0) {
+    let qty = parseInt(qtyInput.value);
+    if (currentStock <= 0) {
         showToast("Sorry, this candle is currently sold out.");
         return;
     }
 
-    if (qty > currentStock) {
-        qtyInput.value = currentStock;
-        showToast("Looks like you’ve reached the limit for this item.");
-        return;
-    }
+    qty = Math.min(qty, currentStock);
 
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    const product = {
-        id: 'prod_TJFBKLuYMiSKVD',
-        name: PRODUCT_NAME,
-        price: 24,
-        priceId: 'price_1SMchZKzSemqLUp4kxjuq3IV',
-        quantity: parseInt(qtyInput.value),
-        image: 'https://th876.github.io/thc-product-images/hot-cocoa-noflame.png',
-        description: 'Rich dark cocoa topped with fluffy marshmallow'
-    };
+    const existingItem = cart.find(i => i.id === 'prod_TJFBKLuYMiSKVD');
 
-    const existingItem = cart.find(i => i.id === product.id);
     if (existingItem) {
         existingItem.quantity = Math.min(existingItem.quantity + qty, currentStock);
     } else {
-        cart.push(product);
+        cart.push({
+            id: 'prod_TJFBKLuYMiSKVD',
+            name: PRODUCT_NAME,
+            price: 1,
+            priceId: 'price_1SMchZKzSemqLUp4kxjuq3IV',
+            quantity: qty,
+            image: 'https://th876.github.io/thc-product-images/hot-cocoa-noflame.png',
+            description: 'Rich dark cocoa topped with fluffy marshmallow'
+        });
     }
 
     localStorage.setItem("cart", JSON.stringify(cart));
     updateCartCount();
-    showToast(`${qty} × ${product.name} added to your cart!`);
+    showToast(`${qty} × ${PRODUCT_NAME} added to your cart!`);
 });
+// addToCartBtn.addEventListener("click", () => {
+//     const qty = parseInt(qtyInput.value);
+
+//     if (currentStock === 0) {
+//         showToast("Sorry, this candle is currently sold out.");
+//         return;
+//     }
+
+//     if (qty > currentStock) {
+//         qtyInput.value = currentStock;
+//         showToast("Looks like you’ve reached the limit for this item.");
+//         return;
+//     }
+
+//     const cart = JSON.parse(localStorage.getItem("cart")) || [];
+//     const product = {
+//         id: 'prod_TJFBKLuYMiSKVD',
+//         name: PRODUCT_NAME,
+//         price: 24,
+//         priceId: 'price_1SMchZKzSemqLUp4kxjuq3IV',
+//         quantity: parseInt(qtyInput.value),
+//         image: 'https://th876.github.io/thc-product-images/hot-cocoa-noflame.png',
+//         description: 'Rich dark cocoa topped with fluffy marshmallow'
+//     };
+
+//     const existingItem = cart.find(i => i.id === product.id);
+//     if (existingItem) {
+//         existingItem.quantity = Math.min(existingItem.quantity + qty, currentStock);
+//     } else {
+//         cart.push(product);
+//     }
+
+//     localStorage.setItem("cart", JSON.stringify(cart));
+//     updateCartCount();
+//     showToast(`${qty} × ${product.name} added to your cart!`);
+// });
 
 // --- 🟢 Toast System ---
 function showToast(message) {

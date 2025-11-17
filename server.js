@@ -122,11 +122,6 @@ app.post(
                         await product.save();
                     }
 
-                    // await Product.updateOne(
-                    //     { name: item.name.trim() },
-                    //     { $inc: { stock: -Number(item.quantity) } }
-                    //     // { $inc: { stock: -item.quantity } }
-                    // );
                 }
 
                 console.log(`✅ Stock updated for session ${session.id}`);
