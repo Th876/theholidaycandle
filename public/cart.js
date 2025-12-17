@@ -1,7 +1,7 @@
 // ======= CART LOGIC WITH TOASTS AND STOCK LIMITS =======
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 let useLocalPickup = false;
-const SHIPPING_COST = 7.99; // default USPS shipping
+const SHIPPING_COST = 9.99; // default USPS shipping
 let productStock = {}; // holds stock data
 
 // ===== FETCH STOCK DATA =====
