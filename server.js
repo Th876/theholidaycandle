@@ -18,7 +18,7 @@ const app = express();
 
 const PORT = process.env.PORT || 4242;
 const YOUR_DOMAIN = process.env.YOUR_DOMAIN || `http://localhost:${PORT}`;
-const SHIPPING_COST = 799;
+const SHIPPING_COST = 999;
 const LOCAL_PICKUP_CODE = process.env.LOCAL_PICKUP_CODE || 'HOLIDAYSTAR25';
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', { apiVersion: '2025-09-30.clover' });
 const resend = new Resend(process.env.RESEND_API_KEY);
